@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find User</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- GSAP Animation Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+  <style>
+    body {
+      background: #1a1a2e;
+      color: white;
+      font-family: 'Arial', sans-serif;
+    }
+    .input-box {
+      transition: all 0.3s ease-in-out;
+    }
+    .input-box:focus {
+      border-color: #4f46e5;
+      box-shadow: 0 0 10px #4f46e5;
+    }
+    .search-btn:hover {
+      transform: scale(1.05);
+    }
+  </style>
+
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen text-white">
+
+  <h1 class="text-3xl font-bold mb-6 text-blue-400">Find User Details</h1>
+
+  <input 
+    id="search_id" 
+    placeholder="Enter Unique ID"
+    class="input-box w-64 p-3 mb-4 border-2 border-gray-600 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-blue-400"
+  >
+
+  <button 
+    onclick="fetchUser()" 
+    class="search-btn bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition-transform duration-200">
+    Search
+  </button>
+
+  <div id="userDetails" class="hidden mt-6 bg-gray-800 p-5 rounded-lg shadow-lg text-center opacity-0 scale-90"></div>
+
+  <script>
+    async function fetchUser() {
+      const unique_id = document.getElementById('search_id').value;
+      const userDetailsDiv = document.getElementById('userDetails');
+
+      try {
+        const res = await fetch(`http://localhost:5503/get-user/${unique_id}`);
+        const data = await res.json();
+
+        if (data.error) {
+          userDetailsDiv.innerHTML = `<p class="text-red-500">${data.error}</p>`;
+        } else {
+          userDetailsDiv.innerHTML = `
+            <p><strong class="text-blue-300">Name:</strong> ${data.name}</p>
+            <p><strong class="text-blue-300">Age:</strong> ${data.age}</p>
+            <p><strong class="text-blue-300">Email:</strong> ${data.email}</p>
+            <p><strong class="text-blue-300">Phone:</strong> ${data.phone}</p>
+            <p><strong class="text-blue-300">Address:</strong> ${data.address}</p>
+          `;
+        }
+
+        // GSAP Animation
+        userDetailsDiv.classList.remove("hidden");
+        gsap.fromTo(userDetailsDiv, { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.5 });
+
+      } catch (error) {
+        userDetailsDiv.innerHTML = '<p class="text-red-500">Error fetching user</p>';
+      }
+    }
+  </script>
+
+</body>
+</html>
