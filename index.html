@@ -4,96 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Add User</title>
-
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- GSAP for Animations -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      color: white;
-    }
-
-    .container {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      max-width: 400px;
-      width: 100%;
-      transition: 0.3s;
-    }
-
-    input {
-      display: block;
-      margin: 10px auto;
-      padding: 10px;
-      width: 100%;
-      border: none;
-      border-radius: 8px;
-      outline: none;
-      font-size: 16px;
-      background: rgba(255, 255, 255, 0.2);
-      color: white;
-    }
-
-    input::placeholder {
-      color: rgba(255, 255, 255, 0.7);
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      margin-top: 10px;
-      background: #ff7eb3;
-      border: none;
-      color: white;
-      font-size: 18px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    button:hover {
-      background: #ff5277;
-    }
-
-    #result {
-      margin-top: 15px;
-      font-size: 16px;
-    }
-  </style>
 </head>
 <body>
 
-  <div class="container">
-    <h1 class="text-2xl font-bold mb-4">Add User</h1>
-    <form id="userForm">
-      <input placeholder="Unique ID" id="unique_id" required>
-      <input placeholder="Name" id="name" required>
-      <input placeholder="Age" id="age" type="number" required>
-      <input placeholder="Email" id="email" type="email" required>
-      <input placeholder="Phone" id="phone" required>
-      <input placeholder="Address" id="address" required>
-      <button type="submit">Submit</button>
-    </form>
-    <p id="result"></p>
-  </div>
+  <h1>Add User</h1>
+  <form id="userForm">
+    <input placeholder="Unique ID" id="unique_id" required>
+    <input placeholder="Name" id="name" required>
+    <input placeholder="Age" id="age" type="number" required>
+    <input placeholder="Email" id="email" type="email" required>
+    <input placeholder="Phone" id="phone" required>
+    <input placeholder="Address" id="address" required>
+    <button type="submit">Submit</button>
+  </form>
+  <p id="result"></p>
 
   <script>
-    // GSAP animations for smooth entrance
-    gsap.from(".container", { opacity: 0, y: -50, duration: 1.2, ease: "power2.out" });
-
     document.getElementById('userForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       
@@ -109,9 +35,7 @@
       try {
         const res = await fetch("https://your-vercel-backend.vercel.app/api/users", {
           method: "POST",
-          headers: { 
-            'Content-Type': 'application/json'
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(user)
         });
 
@@ -121,9 +45,6 @@
 
         const result = await res.json();
         document.getElementById('result').innerText = result.message;
-
-        // Success animation
-        gsap.from("#result", { opacity: 0, scale: 0.8, duration: 0.6, ease: "elastic.out(1, 0.5)" });
 
       } catch (error) {
         document.getElementById('result').innerText = 'Error: ' + error.message;
